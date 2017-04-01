@@ -22,7 +22,7 @@ def main():
         for node in client.nodes.list():
             node = node.attrs
             if not node['Status']['State'] == 'ready':
-                pass
+                continue
             node_addr = node['Status']['Addr']
             node_name = '{}-{}'.format(
                 node['Spec']['Role'],
