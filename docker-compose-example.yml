@@ -1,0 +1,27 @@
+version: "3"
+services:
+
+  portainer:
+    image: portainer/portainer
+    ports:
+      - "9000:9000"
+    stop_grace_period: 1m30s
+    volumes:
+      - endpoints:/etc/endpoints
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: ['--external-endpoints', '/etc/endpoints/endpoints.json']
+    depends_on:
+      - node-monitor
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+  node-monitor:
+    image: btyh17mxy/portainernodemonitor
+    volumes:
+      - endpoints:/etc/endpoints
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+volumes:
+  endpoints:
