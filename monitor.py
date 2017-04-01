@@ -19,7 +19,8 @@ def main():
     while True:
         node_list = []
         client = docker.from_env()
-        for node in client.nodes():
+        for node in client.nodes.list():
+            node = node.attrs
             if not node['Status']['State'] == 'ready':
                 pass
             node_addr = node['Status']['Addr']
@@ -33,9 +34,9 @@ def main():
             }
             node_list.append(node_item)
         node_list = sorted(node_list, key=lambda item: item['Name'])
+        print(node_list)
         with open(out_put_path, 'w') as f_endpoints:
             f_endpoints.write(json.dumps(node_list))
-        print(node_list)
         time.sleep(sync_interval)
 
 
